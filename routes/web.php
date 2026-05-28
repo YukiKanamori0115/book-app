@@ -9,5 +9,7 @@ Route::get('/', function () {
 use App\Http\Controllers\BookController;
 
 // 「/books」にアクセスしたらBookControllerのindexという関数を動かす
-Route::get('/books', [BookController::class, 'index'])->name('books.index');
+Route::get('/books', [BookController::class, 'index'])
+->middleware(['auth'])
+->name('books.index');
 
