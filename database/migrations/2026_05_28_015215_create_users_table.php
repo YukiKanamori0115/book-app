@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 💡 あなたのテーブル定義書に書き換えました！
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('employee_id')->unique();
