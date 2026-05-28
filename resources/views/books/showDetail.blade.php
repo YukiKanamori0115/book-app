@@ -17,8 +17,6 @@
         .form-group { margin-bottom: 15px; display: flex; align-items: center; }
         .disabled-form { background: #f0f0f0; opacity: 0.6; pointer-events: none; padding: 15px; border: 1px solid #ccc; }
         .action-btn { margin-left: 10px; cursor: pointer; color: #0066cc; text-decoration: underline; background: none; border: none; font-size: 100%; }
-        
-        /* ★ 星型選択システム用スタイル */
         .star-rating-input { display: inline-flex; flex-direction: row-reverse; gap: 4px; margin: 0 10px; }
         .star-rating-input span { font-size: 24px; cursor: pointer; color: #ccc; transition: color 0.2s; }
         .star-rating-input:not(.disabled-stars) span:hover,
@@ -30,7 +28,6 @@
 </head>
 <body>
 
-    <!-- ヘッダーエリア -->
     <div class="header-area">
         <div><a href="{{ route('books.index') }}">[← 一覧に戻る]</a></div>
         <div>
@@ -42,10 +39,8 @@
         </div>
     </div>
 
-    <!-- 通知エリア -->
     <div id="notification" class="notification-area"></div>
 
-    <!-- ■ 書籍基本情報 -->
     <div class="section">
         <h3>■ 書籍基本情報</h3>
         <ul>
@@ -55,7 +50,6 @@
         </ul>
     </div>
 
-    <!-- ■ 社員レビュー一覧 -->
     <div class="section">
         <h3>■ 社員レビュー一覧</h3>
         <div class="review-box">
@@ -81,7 +75,6 @@
         </div>
     </div>
 
-    <!-- ■ レビューを投稿する -->
     <div class="section">
         <h3>■ レビューを投稿する</h3>
         
@@ -123,7 +116,7 @@
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const bookId = document.getElementById('book-id').value;
 
-        // 星型評価のクリック制御
+        // 星評価のクリックイベント
         document.getElementById('star-container').addEventListener('click', function(e) {
             if (this.classList.contains('disabled-stars')) return;
             if (e.target.tagName === 'SPAN') {
@@ -132,6 +125,7 @@
             }
         });
 
+        // 星の見た目と値を更新
         function setStarRating(value) {
             document.getElementById('rating').value = value;
             document.getElementById('rating-display').textContent = `(${value})`;
@@ -146,7 +140,7 @@
             });
         }
 
-        // 通知処理
+        // 通知表示
         function showNotification(message) {
             const notifyArea = document.getElementById('notification');
             notifyArea.textContent = '【通知エリア: ' + message + ' (非同期表示)】';
@@ -154,7 +148,7 @@
             setTimeout(() => { notifyArea.style.display = 'none'; }, 5000);
         }
 
-        // 送信
+        // レビューの投稿・更新処理
         function submitReview() {
             const reviewId = document.getElementById('editing-review-id').value;
             const rating = document.getElementById('rating').value;
@@ -182,7 +176,7 @@
             });
         }
 
-        // 編集
+        // 編集モードへの切り替え
         function editReview(id, rating, comment) {
             document.getElementById('editing-review-id').value = id;
             document.getElementById('comment').value = comment;
@@ -192,7 +186,7 @@
             window.scrollTo({ top: document.getElementById('review-form-wrapper').offsetTop, behavior: 'smooth' });
         }
 
-        // 削除
+        // レビューの削除処理
         function deleteReview(id) {
             if (!confirm('本当に削除しますか？')) return;
 
@@ -210,7 +204,7 @@
             });
         }
 
-        // 全件読み込み
+        // レビュー全件の非同期読み込み
         function loadAllReviews() {
             fetch(`/books/${bookId}/reviews-all`)
             .then(res => res.json())
@@ -226,98 +220,54 @@
                 }
 
                 data.reviews.forEach(review => {
-                let actionButtonsContainer = document.createDocumentFragment();
+                    let actionButtons = '';
+                    if (review.is_owner) {
+                        actionButtons = `<button class="action-btn" onclick="editReview(${review.id}, ${review.rating}, '${escapeHtml(review.comment)}')">[編集]</button> <button class="action-btn" onclick="deleteReview(${review.id})">[削除]</button>`;
+                    }
+                    const div = document.createElement('div');
+                    div.className = 'review-item';
+                    div.id = `review-${review.id}`;
+                    div.innerHTML = `<strong>${review.user_name} (${review.role_name})</strong> (★${review.rating}) : <span class="comment-text">${escapeHtml(review.comment)}</span> ${actionButtons}`;
+                    listContainer.appendChild(div);
+                });
+                moreBtnArea.style.display = 'none';
+            });
+        }
 
-    if (review.is_owner) {
-        // 編集ボタンの作成
-        const editBtn = document.createElement('button');
-        editBtn.className = 'action-btn';
-        editBtn.textContent = '[編集]';
-        editBtn.addEventListener('click', () => {
-            editReview(review.id, review.rating, review.comment);
-        });
+        // フォームの活性・非活性制御
+        function toggleFormDisabled(isDisabled) {
+            const wrapper = document.getElementById('review-form-wrapper');
+            const inputs = document.querySelectorAll('#review-form input, #review-form button');
+            const starContainer = document.getElementById('star-container');
+            
+            if (isDisabled) {
+                wrapper.classList.add('disabled-form');
+                starContainer.classList.add('disabled-stars');
+                inputs.forEach(el => el.setAttribute('disabled', 'disabled'));
+            } else {
+                wrapper.classList.remove('disabled-form');
+                starContainer.classList.remove('disabled-stars');
+                inputs.forEach(el => el.removeAttribute('disabled'));
+            }
+        }
 
-        // 削除ボタンの作成
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'action-btn';
-        deleteBtn.textContent = '[削除]';
-        deleteBtn.addEventListener('click', () => {
-            deleteReview(review.id);
-        });
+        // フォームのリセット
+        function resetForm(shouldDisable) {
+            document.getElementById('review-form').reset();
+            document.getElementById('editing-review-id').value = '';
+            setStarRating(5);
+            document.getElementById('submit-btn').textContent = '[ レビューを投稿する ]';
+            toggleFormDisabled(shouldDisable);
+        }
 
-        actionButtonsContainer.appendChild(editBtn);
-        // ボタンの間にスペースを挟む
-        actionButtonsContainer.appendChild(document.createTextNode(' ')); 
-        actionButtonsContainer.appendChild(deleteBtn);
-    }
-
-    // レビューアイテム（親要素）の作成
-    const div = document.createElement('div');
-    div.className = 'review-item';
-    div.id = `review-${review.id}`;
-
-    // テキスト部分の作成（textContent を使うことで自動エスケープされ安全）
-    const infoSpan = document.createElement('span');
-    infoSpan.innerHTML = `<strong>${escapeHtml(review.user_name)} (${escapeHtml(review.role_name)})</strong> (★${review.rating}) : `;
-
-    const commentSpan = document.createElement('span');
-    commentSpan.className = 'comment-text';
-    commentSpan.textContent = review.comment; // HTMLエスケープ不要で安全
-
-    // 要素を組み立てて画面に追加
-    div.appendChild(infoSpan);
-    div.appendChild(commentSpan);
-    div.appendChild(document.createTextNode(' ')); // 隙間用
-    div.appendChild(actionButtonsContainer);
-    
-    listContainer.appendChild(div);
-});
-
-// ボタンエリアの非表示（元のコードの文脈維持）
-moreBtnArea.style.display = 'none';
-// }); } ※元のコードで閉じタグが乱れていたため、関数の終端に合わせて調整してください
-
-
-/**
- * フォームの無効化 / 有効化 切り替え
- */
-function toggleFormDisabled(isDisabled) {
-    const wrapper = document.getElementById('review-form-wrapper');
-    const starContainer = document.getElementById('star-container');
-    const inputs = document.querySelectorAll('#review-form input, #review-form button');
-
-    if (isDisabled) {
-        wrapper.classList.add('disabled-form');
-        starContainer.classList.add('disabled-stars');
-        inputs.forEach(el => el.setAttribute('disabled', 'disabled'));
-    } else {
-        wrapper.classList.add('disabled-form'); // バグ修正: remove に変更してください
-        wrapper.classList.remove('disabled-form');
-        starContainer.classList.remove('disabled-stars');
-        inputs.forEach(el => el.removeAttribute('disabled'));
-    }
-}
-
-/**
- * フォームのリセット
- */
-function resetForm(shouldDisable) {
-    document.getElementById('review-form').reset();
-    document.getElementById('editing-review-id').value = '';
-    setStarRating(5);
-    document.getElementById('submit-btn').textContent = '[ レビューを投稿する ]';
-    toggleFormDisabled(shouldDisable);
-}
-
-/**
- * HTMLのエスケープ処理
- */
-function escapeHtml(str) {
-    if (!str) return '';
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
+        // HTMLエスケープ処理
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
