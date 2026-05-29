@@ -14,6 +14,14 @@
             @auth
                 <div class="flex items-center gap-4 text-sm bg-blue-950 px-4 py-2 rounded-md">
                     <span>[ユーザー名: {{ Auth::user()->name }} ({{ Auth::user()->role }})]</span>
+                    
+                    {{-- 経理部のみ表示されるリンク --}}
+                    @can('is-accounting')
+                        <a href="{{ route('admin.books.checkIsbn') }}" class="text-yellow-300 hover:text-yellow-400 font-medium transition underline underline-offset-4">
+                            [書籍管理画面]
+                        </a>
+                    @endcan
+
                     <form action="{{ route('logout') }}" method="POST" class="m-0">
                         @csrf
                         <button type="submit" class="text-red-300 hover:text-red-400 font-medium transition">
@@ -26,9 +34,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-        {{-- ここに各ページのコンテンツが差し込まれる --}}
         @yield('content')
     </main>
-
 </body>
 </html>
