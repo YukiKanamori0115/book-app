@@ -7,6 +7,7 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule; // ユニーク制約の除外設定に必要
 
 class BookAdminController extends Controller
 {
@@ -32,12 +33,11 @@ class BookAdminController extends Controller
 
         $isbn = $request->input('isbn13');
 
-        // 仕様: すでにローカルDBに登録済み（既登録）かを確認
-        $existsInDb = Book::where('isbn13', $isbn)->exists();
-        if ($existsInDb) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'この書籍は既にシステムに登録されています。');
+        // 【機能拡張】すでにローカルDBに登録済みの場合は、即座に「編集画面」へリダイレクト
+        $existingBook = Book::where('isbn13', $isbn)->first();
+        if ($existingBook) {
+            return redirect()->route('admin.books.edit', $existingBook->id)
+                ->with('status', '指定された書籍は既に登録されています。情報を編集できます。');
         }
 
         try {
@@ -124,5 +124,56 @@ class BookAdminController extends Controller
         // 完了後、仕様書に従って書籍一覧画面へ転送
         return redirect()->route('books.index')
             ->with('status', '書籍の登録が完了しました。');
+    }
+
+    /**
+     * F-11: 書籍編集画面表示
+     */
+    public function edit($id)
+    {
+        // 指定されたIDがなければ自動で404エラーを返す安全設計
+        $book = Book::findOrFail($id);
+        return view('admin.books.edit', compact('book'));
+    }
+
+    /**
+     * F-12: 書籍更新処理
+     */
+    public function update(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+
+        // バリデーション: isbn13は「自分自身のIDを除いてユニーク」にするルールを適用
+        $validated = $request->validate([
+            'isbn13' => ['required', 'string', 'size:13', 'regex:/^[0-9]+$/', Rule::unique('books', 'isbn13')->ignore($book->id)],
+            'title'  => ['required', 'string', 'max:255'],
+            'author' => ['required', 'string', 'max:255'],
+        ]);
+
+        if (empty($validated['author'])) {
+            $validated['author'] = '不明';
+        }
+
+        // データベースのレコードを更新
+        $book->update($validated);
+
+        // 更新後は要求仕様に従い、一覧画面にフラッシュメッセージ付きでリダイレクト
+        return redirect()->route('books.index')
+            ->with('status', '書籍情報を更新しました。');
+    }
+
+    /**
+     * F-13: 書籍削除処理 (物理削除)
+     */
+    public function destroy($id)
+    {
+        $book = Book::findOrFail($id);
+
+        // データベースから物理削除（完全抹消）を実行
+        $book->delete();
+
+        // 削除完了後は、再び書籍を扱いやすいようISBN確認画面（管理トップ）へ戻す
+        return redirect()->route('admin.books.checkForm')
+            ->with('status', '書籍レコードをデータベースから物理削除しました。');
     }
 }
