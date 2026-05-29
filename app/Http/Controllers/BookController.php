@@ -11,7 +11,7 @@ class BookController extends Controller
      * 書籍一覧画面を表示
      */
     public function index(Request $request)
-{
+    {
     // 1. 入力されたキーワードを取得
     $keyword = $request->input('keyword');
 
@@ -31,5 +31,15 @@ class BookController extends Controller
 
     // 5. ビューに渡す
     return view('books.index', compact('books'));
-}
+    }
+
+    public function show($id)
+    {
+        // 1. URLの {id} を元に、データベースから書籍を1件取得（なければ404エラー）
+        // ついでにその本に紐づくレビュー（user情報もセット）を一緒にロードしておきます
+        $book = Book::with('reviews.user')->findOrFail($id);
+
+        // 2. 詳細画面のビュー（books/show.blade.phpなど）に書籍データを渡して表示
+        return view('books.show', compact('book'));
+    }
 }
