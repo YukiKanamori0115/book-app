@@ -58,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])
         ->name('reviews.destroy')
         ->whereNumber('id');
+
+    Route::get('/books/{book_id}/reviews-all', [ReviewController::class, 'getAllReviews'])
+    ->name('reviews.all')
+    ->whereNumber('book_id');
 });
 
 // =========================================================================

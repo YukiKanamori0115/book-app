@@ -63,7 +63,8 @@
                         <span class="comment-text">{{ $review->comment }}</span>
                         
                         @if($review->user_id === Auth::id())
-                            <button class="action-btn" onclick="editReview({{ $review->id }}, {{ $review->rating }}, @json($review->comment))">[編集]</button>
+                            {{-- JavaScriptの改行壊れを防ぐため addslashes で安全に配置 --}}
+                            <button class="action-btn" onclick="editReview({{ $review->id }}, {{ $review->rating }}, '{{ addslashes($review->comment) }}')">[編集]</button>
                             <button class="action-btn" onclick="deleteReview({{ $review->id }})">[削除]</button>
                         @endif
                     </div>
@@ -121,7 +122,7 @@
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const bookId = document.getElementById('book-id').value;
-        let userHasReviewed = {{ $hasReviewed ? 'true' : 'false' }}; // 【改善】現在の状態をスクリプトで管理
+        let userHasReviewed = {{ $hasReviewed ? 'true' : 'false' }};
 
         // 星型評価のクリック制御
         document.getElementById('star-container').addEventListener('click', function(e) {
@@ -154,7 +155,7 @@
             setTimeout(() => { notifyArea.style.display = 'none'; }, 5000);
         }
 
-        // 送信
+        // 送信 (web.php の設計に合わせて POST / PUT を分流させる)
         function submitReview() {
             const reviewId = document.getElementById('editing-review-id').value;
             const rating = document.getElementById('rating').value;
@@ -165,10 +166,19 @@
                 return;
             }
 
-            fetch(`/books/${bookId}/reviews`, {
-                method: 'POST',
+            // ⭕【web.php同期用修正】新規か修正かでURLとHTTPメソッドを完全切り替え
+            let url = `/books/${bookId}/reviews`;
+            let method = 'POST';
+
+            if (reviewId) {
+                url = `/reviews/${reviewId}`;
+                method = 'PUT';
+            }
+
+            fetch(url, {
+                method: method,
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-                body: JSON.stringify({ review_id: reviewId, rating: rating, comment: comment })
+                body: JSON.stringify({ rating: rating, comment: comment })
             })
             .then(res => {
                 if (!res.ok) throw new Error('HTTPエラーが発生しました。');
@@ -177,7 +187,7 @@
             .then(data => {
                 if (data.success) {
                     showNotification(data.message);
-                    userHasReviewed = true; // 投稿成功なので状態を「投稿済」に
+                    userHasReviewed = true; 
                     loadAllReviews();
                 } else if (data.error) {
                     alert(data.error);
@@ -202,7 +212,7 @@
             resetForm(userHasReviewed); 
         }
 
-        // 削除
+        // 削除 (web.php の /reviews/{id} に対応)
         function deleteReview(id) {
             if (!confirm('本当に削除しますか？')) return;
 
@@ -217,7 +227,7 @@
             .then(data => {
                 if (data.success) {
                     showNotification(data.message);
-                    userHasReviewed = false; // 削除成功なので状態を「未投稿」に
+                    userHasReviewed = false; 
                     loadAllReviews();
                 }
             })
@@ -233,7 +243,6 @@
                 const moreBtnArea = document.getElementById('more-btn-area');
                 listContainer.innerHTML = '';
 
-                // 【バックエンド連携の推奨】もしAPI側でhas_reviewedを返せるならここで同期するとより堅牢になります
                 if (data.has_reviewed !== undefined) userHasReviewed = data.has_reviewed;
 
                 if (data.reviews.length === 0) {
@@ -263,7 +272,6 @@
                 });
                 moreBtnArea.style.display = 'none';
                 
-                // リスト更新に伴い、現在の状態（userHasReviewed）にフォームをリセット
                 resetForm(userHasReviewed);
             })
             .catch(() => alert('レビュー一覧の読み込みに失敗しました。'));
