@@ -10,36 +10,19 @@ use Illuminate\Support\Facades\Auth;
 class ReviewController extends Controller
 {
     /**
-     * レビュー投稿および修正（非同期対応）
+     * レビュー新規投稿 (POST /books/{book_id}/reviews)
      */
-    public function storeOrUpdate(Request $request, Book $book)
+    public function store(Request $request, $book_id)
     {
         $userId = Auth::id();
+        $book = Book::findOrFail($book_id);
         
         $validated = $request->validate([
-            'review_id' => 'nullable|integer|exists:reviews,id',
-            'rating'    => 'required|integer|between:1,5',
-            'comment'   => 'required|string|max:1000',
+            'rating'  => 'required|integer|between:1,5',
+            'comment' => 'required|string|max:1000',
         ]);
 
-        // 【修正モード】
-        if (!empty($validated['review_id'])) {
-            $review = Review::where('id', $validated['review_id'])
-                ->where('user_id', $userId)
-                ->firstOrFail();
-
-            $review->update([
-                'rating'  => $validated['rating'],
-                'comment' => $validated['comment'],
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'レビューを修正しました'
-            ]);
-        }
-
-        // 【新規投稿モード】
+        // 【新規投稿モード】二重投稿チェック
         $exists = Review::where('book_id', $book->id)
             ->where('user_id', $userId)
             ->exists();
@@ -65,10 +48,41 @@ class ReviewController extends Controller
     }
 
     /**
-     * レビュー削除（非同期対応）
+     * レビュー修正 (PUT /reviews/{id})
      */
-    public function destroy(Review $review)
+    public function update(Request $request, $id)
     {
+        $userId = Auth::id();
+
+        $validated = $request->validate([
+            'rating'  => 'required|integer|between:1,5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        // ログインユーザー本人のレビューか確認して取得
+        $review = Review::where('id', $id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+
+        $review->update([
+            'rating'  => $validated['rating'],
+            'comment' => $validated['comment'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'レビューを修正しました'
+        ]);
+    }
+
+    /**
+     * レビュー削除（非同期対応）(DELETE /reviews/{id})
+     */
+    public function destroy($id)
+    {
+        // ルートパラメータ {id} からレビューを取得
+        $review = Review::findOrFail($id);
+
         if ($review->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
@@ -85,22 +99,28 @@ class ReviewController extends Controller
     }
 
     /**
-     * 「↓もっと見る」用・リフレッシュ用の全件取得
+     * 「↓もっと見る」用・リフレッシュ用の全件取得 (GET /books/{book_id}/reviews-all)
      */
-    public function getAllReviews(Book $book)
+    public function getAllReviews($book_id)
     {
+        $book = Book::findOrFail($book_id);
+
         // ユーザーに紐づく権限テーブル(role)もまとめてロード
         $reviews = $book->reviews()->with('user.role')->get()->map(function ($review) {
             return [
                 'id'         => $review->id,
                 'user_name'  => $review->user->name,
-                'role_name'  => $review->user->role->name ?? '一般', // 権限名を取得
+                'role_name'  => $review->user->role->name ?? '一般', 
                 'rating'     => $review->rating,
                 'comment'    => $review->comment,
                 'is_owner'   => $review->user_id === Auth::id(),
             ];
         });
 
-        return response()->json(['reviews' => $reviews]);
+        // 前回の修正（同期用フラグの返却）と構文修正を維持
+        return response()->json([
+            'reviews'      => $reviews,
+            'has_reviewed' => $book->reviews()->where('user_id', Auth::id())->exists(),
+        ]);
     }
 }
