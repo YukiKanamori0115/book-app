@@ -101,6 +101,9 @@ class ReviewController extends Controller
             ];
         });
 
-        return response()->json(['reviews' => $reviews]);
+        return response()->json([
+            'reviews' => $reviews,
+            'has_reviewed' => $book->reviews()->where('user_id', Auth::id())->exists()
+        ]);
     }
 }
