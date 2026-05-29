@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookAdminController;
 use App\Http\Controllers\ReviewController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 | 社内書籍管理システムのルーティング定義
 |
 */
+
+// =========================================================================
+// 0. ルートURL (/) へのアクセス制御 (404対策・仕様補完)
+// =========================================================================
+Route::get('/', function () {
+    // ログイン済みなら書籍一覧、未ログインならログイン画面へリダイレクト
+    return Auth::check()
+        ? redirect()->route('books.index')
+        : redirect()->route('login');
+});
 
 // =========================================================================
 // 1. 未ログインユーザー専用ルート (Guest Middleware)
