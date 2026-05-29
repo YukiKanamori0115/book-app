@@ -28,15 +28,18 @@
 
         <section class="bg-white p-6 rounded-lg shadow-sm mb-8">
             <h2 class="text-md font-bold text-gray-700 mb-3">■ 書籍検索</h2>
-            <form action="#" method="GET" class="flex gap-2 max-w-md">
-                <input type="text" placeholder="検索キーワードを入力..." 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            <form action="{{ route('books.index') }}" method="GET" class="flex gap-2 max-w-md">
+                <input  type="text" 
+                        name="keyword" 
+                        value="{{ request('keyword') }}" 
+                        placeholder="検索キーワードを入力..." 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-black">
+    
                 <button type="submit" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition shadow-sm">
+                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium whitespace-nowrap">
                     検索
                 </button>
             </form>
-        </section>
 
         <section class="bg-white p-6 rounded-lg shadow-sm">
             <div class="flex justify-between items-center mb-4">
@@ -56,7 +59,9 @@
                         @forelse($books as $book)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4 font-medium text-blue-600 hover:underline cursor-pointer">
-                                    {{ $book->title }}
+                                    <a href="{{ route('books.showDetail', $book->id) }}" class="text-blue-600 hover:underline block w-full h-full">
+                                        {{ $book->title }}
+                                    </a>
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 font-mono">{{ $book->isbn13 }}</td>
                                 <td class="px-6 py-4 text-gray-600">{{ $book->author }}</td>

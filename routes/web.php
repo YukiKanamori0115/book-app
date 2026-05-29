@@ -71,8 +71,8 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('id');
 
     Route::get('/books/{book_id}/reviews-all', [ReviewController::class, 'getAllReviews'])
-    ->name('reviews.all')
-    ->whereNumber('book_id');
+        ->name('reviews.all')
+        ->whereNumber('book_id');
 });
 
 // =========================================================================
@@ -118,3 +118,18 @@ Route::middleware(['auth', 'role:経理部'])
             ->name('books.destroy')
             ->whereNumber('id');
     });
+
+// =========================================================================
+// 参考画面: Laravel Breeze で自動生成されるプロフィール管理ルート
+// =========================================================================
+//ダッシュボード画面
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// プロフィール画面
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
