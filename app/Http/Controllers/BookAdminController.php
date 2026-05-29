@@ -122,7 +122,7 @@ class BookAdminController extends Controller
         ]);
 
         // 完了後、仕様書に従って書籍一覧画面へ転送
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.checkForm')
             ->with('status', '書籍の登録が完了しました。');
     }
 
@@ -158,7 +158,7 @@ class BookAdminController extends Controller
         $book->update($validated);
 
         // 更新後は要求仕様に従い、一覧画面にフラッシュメッセージ付きでリダイレクト
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.checkForm')
             ->with('status', '書籍情報を更新しました。');
     }
 
