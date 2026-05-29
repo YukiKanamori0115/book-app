@@ -12,7 +12,7 @@ class RoleSeeder extends Seeder
     {
         // 役割データを登録
         DB::table('roles')->insert([
-            ['id' => 1, 'name' => '管理者', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 1, 'name' => '経理部', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 2, 'name' => '一般社員', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
