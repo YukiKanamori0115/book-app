@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
 
     // 書籍詳細画面表示 (F-05)
     Route::get('/books/{id}', [BookController::class, 'show'])
-        ->name('books.showDetail')
+        ->name('books.show')
         ->whereNumber('id');
 
     // --- レビュー非同期処理セクション (F-06 / 設計書補完分) ---
