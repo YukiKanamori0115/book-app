@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,  // ① まず役割を作る
             UserSeeder::class,  // ② 次にその役割を持ったユーザーを作る
             BookSeeder::class,  // ③ 最後に本を作る
+            ReviewSeeder::class,
         ]);
     }
 }
