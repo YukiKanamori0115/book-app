@@ -12,7 +12,7 @@
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <h1 class="text-xl font-bold tracking-wider">📚 社内書籍管理システム</h1>
             <div class="flex items-center gap-4 text-sm bg-blue-950 px-4 py-2 rounded-md">
-                <span>[ユーザー名: 山田太郎(一般)]</span>
+                <span>[ユーザー名: {{ Auth::user()->name }}]</span>
                 <button class="text-red-300 hover:text-red-400 font-medium transition">[ログアウト]</button>
             </div>
         </div>
