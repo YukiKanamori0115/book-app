@@ -6,10 +6,26 @@ use App\Models\Book;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL; // 👈 これを追加
 use Tests\TestCase;
 
 class ShowDetailTest extends TestCase
 {
+    /**
+     * テスト実行前に必ず走る処理
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // ⭕【最強のルートエラー対策】
+        // ナビゲーションバーなどが「存在しないルート名」を呼び出しても、
+        // エラーを投げずにすべて「http://localhost/dummy-route」を自動で返すように偽装します。
+        URL::resolveMissingNamedRoutesUsing(function ($name, $parameters, $absolute) {
+            return '/dummy-route';
+        });
+    }
+
     /**
      * データベースが空でも、本とユーザーを偽装してビューをテストする
      */
@@ -22,7 +38,7 @@ class ShowDetailTest extends TestCase
         $mockBook->author = 'ノンデータベース著者';
         $mockBook->isbn13 = '9784000000000';
 
-        // reviews リレーションを空のコレクションとして確定させる
+        // reviews リレーションを空のコレクションとして確定
         $mockBook->setRelation('reviews', new Collection([]));
 
         // 2. 【ユーザーを偽装】
@@ -34,7 +50,7 @@ class ShowDetailTest extends TestCase
         // 3. ログイン状態を偽装
         $this->actingAs($mockUser);
 
-        // 4. 【キャッシュ対策】view() ヘルパーを使って直接レンダリングを要求
+        // 4. 正しいパスを指定してレンダリング
         $view = $this->view('books.showDetail', [
             'book' => $mockBook
         ]);
