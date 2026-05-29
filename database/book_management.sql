@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 -- phpMyAdmin SQL Dump
 
 -- version 5.2.1
@@ -7,13 +7,13 @@
 
 --
 
--- ƒzƒXƒg: 127.0.0.1:3307
+-- ï¿½zï¿½Xï¿½g: 127.0.0.1:3307
 
--- ¶¬“úŽž: 2026-05-28 09:51:58
+-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 2026-05-28 09:51:58
 
--- ƒT[ƒo‚Ìƒo[ƒWƒ‡ƒ“F 10.4.32-MariaDB
+-- ï¿½Tï¿½[ï¿½oï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½F 10.4.32-MariaDB
 
--- PHP ‚Ìƒo[ƒWƒ‡ƒ“: 8.2.12
+-- PHP ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½: 8.2.12
 
 
 
@@ -39,7 +39,7 @@ SET time_zone = "+00:00";
 
 --
 
--- ƒf[ƒ^ƒx[ƒX: `book_management`
+-- ï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½X: `book_management`
 
 --
 
@@ -51,7 +51,7 @@ SET time_zone = "+00:00";
 
 --
 
--- ƒe[ƒuƒ‹‚Ì\‘¢ `migrations`
+-- ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Ì\ï¿½ï¿½ `migrations`
 
 --
 
@@ -71,7 +71,7 @@ CREATE TABLE `migrations` (
 
 --
 
--- ƒ_ƒ“ƒv‚µ‚½ƒe[ƒuƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX
+-- ï¿½_ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½X
 
 --
 
@@ -79,7 +79,7 @@ CREATE TABLE `migrations` (
 
 --
 
--- ƒe[ƒuƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX `migrations`
+-- ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½X `migrations`
 
 --
 
@@ -91,7 +91,7 @@ ALTER TABLE `migrations`
 
 --
 
--- ƒ_ƒ“ƒv‚µ‚½ƒe[ƒuƒ‹‚Ì AUTO_INCREMENT
+-- ï¿½_ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ AUTO_INCREMENT
 
 --
 
@@ -99,7 +99,7 @@ ALTER TABLE `migrations`
 
 --
 
--- ƒe[ƒuƒ‹‚Ì AUTO_INCREMENT `migrations`
+-- ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ AUTO_INCREMENT `migrations`
 
 --
 
@@ -115,7 +115,7 @@ COMMIT;
 
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 
-=======
+
 -- phpMyAdmin SQL Dump
 
 -- version 5.2.1
@@ -124,13 +124,13 @@ COMMIT;
 
 --
 
--- ƒzƒXƒg: 127.0.0.1:3307
+-- ï¿½zï¿½Xï¿½g: 127.0.0.1:3307
 
--- ¶¬“úŽž: 2026-05-28 09:51:58
+-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 2026-05-28 09:51:58
 
--- ƒT[ƒo‚Ìƒo[ƒWƒ‡ƒ“F 10.4.32-MariaDB
+-- ï¿½Tï¿½[ï¿½oï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½F 10.4.32-MariaDB
 
--- PHP ‚Ìƒo[ƒWƒ‡ƒ“: 8.2.12
+-- PHP ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½: 8.2.12
 
 
 
@@ -156,7 +156,7 @@ SET time_zone = "+00:00";
 
 --
 
--- ƒf[ƒ^ƒx[ƒX: `book_management`
+-- ï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½X: `book_management`
 
 --
 
@@ -168,7 +168,7 @@ SET time_zone = "+00:00";
 
 --
 
--- ƒe[ƒuƒ‹‚Ì\‘¢ `migrations`
+-- ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Ì\ï¿½ï¿½ `migrations`
 
 --
 
@@ -188,7 +188,7 @@ CREATE TABLE `migrations` (
 
 --
 
--- ƒ_ƒ“ƒv‚µ‚½ƒe[ƒuƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX
+-- ï¿½_ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½X
 
 --
 
@@ -196,7 +196,7 @@ CREATE TABLE `migrations` (
 
 --
 
--- ƒe[ƒuƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX `migrations`
+-- ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½X `migrations`
 
 --
 
@@ -208,7 +208,7 @@ ALTER TABLE `migrations`
 
 --
 
--- ƒ_ƒ“ƒv‚µ‚½ƒe[ƒuƒ‹‚Ì AUTO_INCREMENT
+-- ï¿½_ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ AUTO_INCREMENT
 
 --
 
@@ -216,7 +216,7 @@ ALTER TABLE `migrations`
 
 --
 
--- ƒe[ƒuƒ‹‚Ì AUTO_INCREMENT `migrations`
+-- ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ AUTO_INCREMENT `migrations`
 
 --
 
@@ -232,5 +232,5 @@ COMMIT;
 
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 
->>>>>>> 375f231d6819a6c4f3a0d8d1684f06aa3d246f45
+
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

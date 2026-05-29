@@ -5,6 +5,18 @@
         </h2>
     </x-slot>
 
+    @if (session('status'))
+    <div class="mb-4 text-sm font-medium text-green-600 bg-green-50 p-3 rounded-md border border-green-200">
+        {{ session('status') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="mb-4 text-sm font-medium text-red-600">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
