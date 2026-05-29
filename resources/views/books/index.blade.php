@@ -9,14 +9,27 @@
 <body class="bg-gray-100 font-sans antialiased text-gray-900">
 
     <header class="bg-blue-900 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <h1 class="text-xl font-bold tracking-wider">📚 社内書籍管理システム</h1>
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <h1 class="text-xl font-bold tracking-wider">📚 社内書籍管理システム</h1>
+        
+        @auth
             <div class="flex items-center gap-4 text-sm bg-blue-950 px-4 py-2 rounded-md">
-                <span>[ユーザー名: {{ Auth::user()->name }}]</span>
-                <button class="text-red-300 hover:text-red-400 font-medium transition">[ログアウト]</button>
+                {{-- 名前と権限を動的に表示 --}}
+                <span>
+                    [ユーザー名: {{ Auth::user()->name }} ({{ Auth::user()->role }})]
+                </span>
+                
+                {{-- ログアウト処理はPOST形式にする必要があります --}}
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="text-red-300 hover:text-red-400 font-medium transition">
+                        [ログアウト]
+                    </button>
+                </form>
             </div>
-        </div>
-    </header>
+        @endauth
+    </div>
+</header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
         
