@@ -59,7 +59,7 @@
                         @forelse($books as $book)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4 font-medium text-blue-600 hover:underline cursor-pointer">
-                                    <a href="{{ route('books.showDetail', $book->id) }}" class="text-blue-600 hover:underline block w-full h-full">
+                                    <a href="{{ route('books.show', $book->id) }}" class="text-blue-600 hover:underline block w-full h-full">
                                         {{ $book->title }}
                                     </a>
                                 </td>
