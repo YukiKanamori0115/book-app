@@ -17,7 +17,7 @@
             <input type="text" 
                    name="isbn" 
                    value="{{ request('isbn') }}" 
-                   placeholder="ISBN13で完全一致検索 (ハイフン不要)" 
+                   placeholder="ISBN検索" 
                    class="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-mono">
 
             <button type="submit" 
