@@ -1,8 +1,7 @@
-@extends('layouts.app')
+<x-app-layout>
+    {{-- タイトルを保持したい場合は x-slot を使用します --}}
+    <x-slot name="title">書籍一覧</x-slot>
 
-@section('title', '書籍一覧')
-
-@section('content')
     {{-- 書籍検索セクション --}}
     <section class="bg-white p-6 rounded-lg shadow-sm mb-8">
         <h2 class="text-md font-bold text-gray-700 mb-3">■ 書籍検索</h2>
@@ -57,4 +56,4 @@
             </table>
         </div>
     </section>
-@endsection
+</x-app-layout>

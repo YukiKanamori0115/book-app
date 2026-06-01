@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="title">書籍詳細</x-slot>
 
-@section('title', '書籍詳細')
-
-@section('content')
     {{-- ヘッダーエリア --}}
     <div class="flex justify-between items-center mb-6">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -77,7 +75,6 @@
         </div>
     </div>
 
-    {{-- スタイル定義はここで完結させる --}}
     <style>
         .notification-area { background: #e0f7fa; padding: 10px; margin-bottom: 20px; border-left: 5px solid #00acc1; display: none; }
         .section { margin-bottom: 25px; }
@@ -89,8 +86,7 @@
         .disabled-form { opacity: 0.6; pointer-events: none; }
     </style>
     
-    {{-- JSは一番下に配置 --}}
     <script>
         // (以前のJSコードをここに配置)
     </script>
-@endsection
+</x-app-layout>
