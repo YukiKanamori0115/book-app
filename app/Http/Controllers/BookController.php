@@ -17,7 +17,6 @@ class BookController extends Controller
 
         // 2. ISBN検索（優先・完全一致）
         if ($request->filled('isbn')) {
-            // 入力からハイフンを除去して完全一致検索
             $isbn = str_replace('-', '', $request->isbn);
             $query->where('isbn13', $isbn);
         } 
@@ -33,7 +32,12 @@ class BookController extends Controller
         // 4. 結果を取得（リレーションも一緒にロード）
         $books = $query->with('reviews')->get();
 
-        // 5. ビューに渡す
+        // 5. 検索結果が0件の場合のメッセージ設定
+        if (($request->filled('isbn') || $request->filled('keyword')) && $books->isEmpty()) {
+            session()->flash('info', '該当する書籍は見つかりませんでした。');
+        }
+
+        // 6. ビューに渡す
         return view('books.index', compact('books'));
     }
 
@@ -43,7 +47,6 @@ class BookController extends Controller
     public function show($id)
     {
         // URLの {id} を元に、データベースから書籍を1件取得
-        // レビューとその投稿者情報を一緒にロード
         $book = Book::with('reviews.user')->findOrFail($id);
 
         return view('books.show', compact('book'));
