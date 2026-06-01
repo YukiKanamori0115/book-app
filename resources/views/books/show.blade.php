@@ -13,6 +13,14 @@
 
     {{-- インラインスタイルの定義 --}}
     <style>
+        /* レビュー本文が長すぎる場合にスクロールバーを出す設定 */
+        .comment-scroll-box {
+            max-height: 150px;    /* 縦の最大高さを150px（およそ5〜6行分）に制限 */
+            overflow-y: auto;     /* 150pxを超えたら自動で縦スクロールバーを表示 */
+            overflow-x: hidden;   /* 横スクロールは出さずに自動折り返しさせる */
+            padding-right: 5px;   /* スクロールバーと文字が被らないように隙間をあける */
+            margin-top: 5px;
+        }
         .notification-area {
             background: #e0f7fa;
             padding: 10px;
@@ -145,7 +153,9 @@
                                 <div class="review-item" id="review-{{ $review->id }}">
                                     <strong>{{ $review->user->name }} ({{ $review->user->role->name ?? '一般' }})</strong>
                                     (★{{ $review->rating }}) :
-                                    <span class="comment-text" style="white-space: pre-wrap;">{{ $review->comment }}</span>
+                                    <div class="comment-scroll-box">
+                                        <span class="comment-text" style="white-space: pre-wrap;">{{ $review->comment }}</span>
+                                    </div>
 
                                     @if($review->user_id === Auth::id())
                                         <button class="action-btn"
@@ -341,52 +351,56 @@
         }
 
         function loadAllReviews() {
-            fetch(`/books/${bookId}/reviews-all`)
-                .then(res => res.ok ? res.json() : Promise.reject())
-                .then(data => {
-                    const listContainer = document.getElementById('review-list');
-                    const moreBtnArea = document.getElementById('more-btn-area');
-                    const moreBtn = document.getElementById('more-btn'); 
-                    listContainer.innerHTML = '';
+    fetch(`/books/${bookId}/reviews-all`)
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(data => {
+            const listContainer = document.getElementById('review-list');
+            const moreBtnArea = document.getElementById('more-btn-area');
+            const moreBtn = document.getElementById('more-btn'); 
+            listContainer.innerHTML = '';
 
-                    if (data.has_reviewed !== undefined) userHasReviewed = data.has_reviewed;
+            if (data.has_reviewed !== undefined) userHasReviewed = data.has_reviewed;
 
-                    if (data.reviews.length === 0) {
-                        listContainer.innerHTML = '<p id="no-review-text">まだレビューはありません。</p>';
-                        if (moreBtnArea) moreBtnArea.style.display = 'none';
-                        resetForm(userHasReviewed);
-                        return;
-                    }
+            if (data.reviews.length === 0) {
+                listContainer.innerHTML = '<p id="no-review-text">まだレビューはありません。</p>';
+                if (moreBtnArea) moreBtnArea.style.display = 'none';
+                resetForm(userHasReviewed);
+                return;
+            }
 
-                    data.reviews.forEach(review => {
-                        let actionButtons = '';
-                        if (review.is_owner) {
-                            actionButtons = `
-                                <button class="action-btn" onclick="editReview(${review.id}, ${review.rating}, '${escapeJsString(review.comment)}')">[編集]</button> 
-                                <button class="action-btn" onclick="deleteReview(${review.id})">[削除]</button>
-                            `;
-                        }
-                        const div = document.createElement('div');
-                        div.className = 'review-item';
-                        div.id = `review-${review.id}`;
-                        div.innerHTML = `
-                            <strong>${review.user_name} (${review.role_name})</strong> (★${review.rating}) : 
-                            <span class="comment-text" style="white-space: pre-wrap;">${escapeHtml(review.comment)}</span> 
-                            ${actionButtons}
-                        `;
-                        listContainer.appendChild(div);
-                    });
+            data.reviews.forEach(review => {
+                let actionButtons = '';
+                if (review.is_owner) {
+                    actionButtons = `
+                        <button class="action-btn" onclick="editReview(${review.id}, ${review.rating}, '${escapeJsString(review.comment)}')">[編集]</button> 
+                        <button class="action-btn" onclick="deleteReview(${review.id})">[削除]</button>
+                    `;
+                }
+                const div = document.createElement('div');
+                div.className = 'review-item';
+                div.id = `review-${review.id}`;
+                
+                // ★ここです！ comment-scroll-box の div タグをしっかり組み込んでいます
+                div.innerHTML = `
+                    <strong>${review.user_name} (${review.role_name})</strong> (★${review.rating}) : 
+                    <div class="comment-scroll-box">
+                        <span class="comment-text" style="white-space: pre-wrap;">${escapeHtml(review.comment)}</span> 
+                    </div>
+                    ${actionButtons}
+                `;
+                listContainer.appendChild(div);
+            });
 
-                    if (moreBtnArea) moreBtnArea.style.display = 'block';
-                    if (moreBtn) {
-                        moreBtn.textContent = '↑元に戻す（閉じる）';
-                    }
-                    isAllReviewsShown = true; 
+            if (moreBtnArea) moreBtnArea.style.display = 'block';
+            if (moreBtn) {
+                moreBtn.textContent = '↑元に戻す（閉じる）';
+            }
+            isAllReviewsShown = true; 
 
-                    resetForm(userHasReviewed);
-                })
-                .catch(() => alert('レビュー一覧の読み込みに失敗しました。'));
-        }
+            resetForm(userHasReviewed);
+        })
+        .catch(() => alert('レビュー一覧の読み込みに失敗しました。'));
+}
 
         function toggleFormDisabled(isDisabled) {
             const wrapper = document.getElementById('review-form-wrapper');
