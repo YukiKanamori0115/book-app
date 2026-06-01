@@ -1,31 +1,30 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('書籍マスタ管理（ISBN確認）') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
+@section('title', '書籍マスタ管理')
+
+@section('content')
+    {{-- ここからがメインコンテンツ --}}
+    
+    {{-- セッションメッセージ --}}
     @if (session('status'))
-    <div class="mb-4 text-sm font-medium text-green-600 bg-green-50 p-3 rounded-md border border-green-200">
-        {{ session('status') }}
-    </div>
+        <div class="mb-4 text-sm font-medium text-green-600 bg-green-50 p-3 rounded-md border border-green-200">
+            {{ session('status') }}
+        </div>
     @endif
 
     @if (session('error'))
-    <div class="mb-4 text-sm font-medium text-red-600">
-        {{ session('error') }}
-    </div>
+        <div class="mb-4 text-sm font-medium text-red-600">
+            {{ session('error') }}
+        </div>
     @endif
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                @if (session('error'))
-                <div class="mb-4 text-sm font-medium text-red-600">
-                    {{ session('error') }}
-                </div>
-                @endif
+                
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                    {{ __('書籍マスタ管理（ISBN確認）') }}
+                </h2>
 
                 <form action="{{ route('admin.books.checkIsbn') }}" method="POST" class="max-w-md">
                     @csrf
@@ -47,4 +46,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

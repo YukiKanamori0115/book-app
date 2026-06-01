@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('book_id')->constrained()->cascadeOnDelete();
             $table->integer('rating');
-            $table->string('title');   // 💡 タイトル
+            $table->string('title')->nullable();   // 💡 タイトル
             $table->text('comment');   // 💡 コメント
             $table->timestamps();      // 💡 ここに1つだけあればOKです！上のほうにあるやつは消してください。
         });
