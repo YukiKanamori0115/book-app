@@ -3,17 +3,7 @@
 @section('title', '書籍一覧')
 
 @section('content')
-    {{-- ここからがメインコンテンツ --}}
-    
-    {{-- 経理部のみの表示は @can で制御しましょう --}}
-    @can('is-accounting') 
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-md shadow-sm">
-            <div class="flex items-center gap-2 text-yellow-800 text-sm font-semibold">
-                <span>[書籍一覧ページ]</span>
-            </div>
-        </div>
-    @endcan
-
+    {{-- 書籍検索セクション --}}
     <section class="bg-white p-6 rounded-lg shadow-sm mb-8">
         <h2 class="text-md font-bold text-gray-700 mb-3">■ 書籍検索</h2>
         <form action="{{ route('books.index') }}" method="GET" class="flex gap-2 max-w-md">
@@ -30,8 +20,9 @@
         </form>
     </section>
 
+    {{-- 書籍一覧セクション --}}
     <section class="bg-white p-6 rounded-lg shadow-sm">
-        <div class="flex justify-between items-center mb-4">
+        <div class="mb-4">
             <h2 class="text-md font-bold text-gray-700">■ 書籍一覧 (全 {{ $books->count() }} 冊)</h2>
         </div>
 
@@ -66,5 +57,4 @@
             </table>
         </div>
     </section>
-
 @endsection
