@@ -11,6 +11,13 @@ class BookIndexTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // ユーザーが使うロールを先に作成する
+        Role::factory()->create(['id' => 1]);
+    }
+
     /**
      * 基本的な画面表示のテスト
      */
