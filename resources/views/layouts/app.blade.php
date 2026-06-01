@@ -13,8 +13,7 @@
             <h1 class="text-xl font-bold tracking-wider">📚 社内書籍管理システム</h1>
             @auth
                 <div class="flex items-center gap-4 text-sm bg-blue-950 px-4 py-2 rounded-md">
-                    <span>[ユーザー名: {{ Auth::user()->name }} ({{ Auth::user()->role }})]</span>
-                    
+                    <span>[ユーザー名: {{ Auth::user()->name }} ({{ Auth::user()->role->name }})]</span>
                     {{-- 経理部のみ表示されるリンク --}}
                     @can('is-accounting')
                         <a href="{{ route('admin.books.checkIsbn') }}" class="text-yellow-300 hover:text-yellow-400 font-medium transition underline underline-offset-4">
