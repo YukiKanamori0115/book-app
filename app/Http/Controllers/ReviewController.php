@@ -114,6 +114,7 @@ class ReviewController extends Controller
                 'rating'     => $review->rating,
                 'comment'    => $review->comment,
                 'is_owner'   => $review->user_id === Auth::id(),
+                
             ];
         });
 
