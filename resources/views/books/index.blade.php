@@ -1,19 +1,27 @@
 <x-app-layout>
-    {{-- タイトルを保持したい場合は x-slot を使用します --}}
     <x-slot name="title">書籍一覧</x-slot>
 
     {{-- 書籍検索セクション --}}
     <section class="bg-white p-6 rounded-lg shadow-sm mb-8">
         <h2 class="text-md font-bold text-gray-700 mb-3">■ 書籍検索</h2>
-        <form action="{{ route('books.index') }}" method="GET" class="flex gap-2 max-w-md">
+        <form action="{{ route('books.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 max-w-2xl">
+            
+            {{-- キーワード検索 (タイトル・著者) --}}
             <input type="text" 
                    name="keyword" 
                    value="{{ request('keyword') }}" 
-                   placeholder="検索キーワードを入力..." 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-black">
-    
+                   placeholder="タイトルや著者名で検索..." 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+
+            {{-- ISBN検索 --}}
+            <input type="text" 
+                   name="isbn" 
+                   value="{{ request('isbn') }}" 
+                   placeholder="ISBN13で完全一致検索 (ハイフン不要)" 
+                   class="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-mono">
+
             <button type="submit" 
-                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium whitespace-nowrap">
+                    class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium whitespace-nowrap">
                 検索
             </button>
         </form>
@@ -48,7 +56,7 @@
                     @empty
                         <tr>
                             <td colspan="3" class="px-6 py-4 text-center text-gray-400 italic">
-                                登録されている本はありません。
+                                該当する書籍は見つかりませんでした。
                             </td>
                         </tr>
                     @endforelse
