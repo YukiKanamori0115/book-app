@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Auth\Middleware\RedirectIfAuthenticated; // 💡これを上に1行追加
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Support\Facades\Gate; // 💡 これを追加
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,9 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 💡ここにログイン後のリダイレクト先（/books）を設定します！
+        // 既存のログイン後のリダイレクト設定
         RedirectIfAuthenticated::redirectUsing(function () {
-            return route('books.index'); // もしくは return '/books'; でもOK
+            return route('books.index');
+        });
+
+        // 💡 権限判定（Gate）をここに直接記述します！
+        Gate::define('is-accounting', function ($user) {
+            return $user->role && $user->role->name === '経理部';
         });
     }
 }
