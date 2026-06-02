@@ -13,18 +13,18 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1種類目の本を登録
         Book::create([
-            'isbn13' => '9784798165882',
-            'title' => 'Laravel Webアプリ開発',
-            'author' => '山田太郎',
-        ]);
-
-        // 2種類目の本を登録
-        Book::create([
-            'isbn13' => '9780000000000',
-            'title' => '達人プログラマー',
-            'author' => '大阪花子',
+            'isbn13' => '9784295017936',
+            'title' => 'スッキリわかるJava入門',
+            'author' => '中山清喬 国本大悟 フレアリンク',
+        ]);Book::create([
+            'isbn13' => '9784297128524',
+            'title' => '図解でやさしくわかるネットワークのしくみ超入門 : フルカラーイラストでネットワークがわかる',
+            'author' => '網野衛二',
+        ]);Book::create([
+            'isbn13' => '9784797380941',
+            'title' => '新しいLinuxの教科書',
+            'author' => '三宅英明 大角祐介',
         ]);
 
         Book::create([
