@@ -181,7 +181,7 @@
                     @php $hasReviewed = $book->reviews->contains('user_id', Auth::id()); @endphp
 
                     <div id="review-form-wrapper" class="{{ $hasReviewed ? 'disabled-form' : '' }}">
-                        <p><small class="text-red-500">[※未投稿時のみ入力可 / 投稿済時は以下フォームがグレーアウト]</small></p>
+                        
 
                         <form id="review-form" onsubmit="event.preventDefault(); submitReview();">
                             <input type="hidden" id="book-id" value="{{ $book->id }}">
@@ -256,7 +256,7 @@
         // 通知処理
         function showNotification(message) {
             const notifyArea = document.getElementById('notification');
-            notifyArea.textContent = '【通知エリア: ' + message + ' (非同期表示)】';
+            notifyArea.textContent = '【' + message + ' 】';
             notifyArea.style.display = 'block';
             setTimeout(() => { notifyArea.style.display = 'none'; }, 5000);
         }
@@ -393,7 +393,7 @@
 
             if (moreBtnArea) moreBtnArea.style.display = 'block';
             if (moreBtn) {
-                moreBtn.textContent = '↑元に戻す（閉じる）';
+                moreBtn.textContent = '↑閉じる';
             }
             isAllReviewsShown = true; 
 
