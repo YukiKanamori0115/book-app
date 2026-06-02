@@ -16,14 +16,20 @@ class BookSeeder extends Seeder
         // 1種類目の本を登録
         Book::create([
             'isbn13' => '9784798165882',
-            'title'  => 'Laravel Webアプリ開発',
+            'title' => 'Laravel Webアプリ開発',
             'author' => '山田太郎',
         ]);
 
         // 2種類目の本を登録
         Book::create([
             'isbn13' => '9784274226298',
-            'title'  => '達人プログラマー',
+            'title' => '達人プログラマー',
+            'author' => '大阪花子',
+        ]);
+
+        Book::create([
+            'isbn13' => '0000000000000',
+            'title' => '達人プロラマー',
             'author' => '大阪花子',
         ]);
     }
