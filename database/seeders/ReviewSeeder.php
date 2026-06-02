@@ -30,8 +30,8 @@ class ReviewSeeder extends Seeder
         // レビューのテストデータ
         $reviews = [
             [
-                'user_id'    => $userIds[array_rand($userIds)], // ランダムにユーザーIDを割り当て
-                'book_id'    => $bookIds[array_rand($bookIds)], // ランダムに本IDを割り当て
+                'user_id'    => $userIds[0], // ランダムにユーザーIDを割り当て
+                'book_id'    => $bookIds[0], // ランダムに本IDを割り当て
                 'rating'     => 5,
                 'title'      => '最高の一冊でした！',
                 'comment'    => '非常に読みやすく、一気に読破してしまいました。初心者にもおすすめしたい本です。',
@@ -39,8 +39,8 @@ class ReviewSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id'    => $userIds[array_rand($userIds)],
-                'book_id'    => $bookIds[array_rand($bookIds)],
+                'user_id'    => $userIds[1],
+                'book_id'    => $bookIds[0],
                 'rating'     => 4,
                 'title'      => '実務で役立つ内容',
                 'comment'    => '解説が丁寧で分かりやすかったです。少し応用的な内容も含まれているので、何度も読み返します。',
@@ -48,8 +48,8 @@ class ReviewSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id'    => $userIds[array_rand($userIds)],
-                'book_id'    => $bookIds[array_rand($bookIds)],
+                'user_id'    => $userIds[2],
+                'book_id'    => $bookIds[1],
                 'rating'     => 3,
                 'title'      => '内容は良いが、少し難しい',
                 'comment'    => 'テーマは興味深かったのですが、予備知識がないと少し理解するのに時間がかかるかもしれません。',

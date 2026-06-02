@@ -26,11 +26,5 @@ class BookSeeder extends Seeder
             'title' => '新しいLinuxの教科書',
             'author' => '三宅英明 大角祐介',
         ]);
-
-        Book::create([
-            'isbn13' => '0000000000000',
-            'title' => '達人プロラマー',
-            'author' => '大阪花子',
-        ]);
     }
 }

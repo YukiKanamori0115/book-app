@@ -20,6 +20,15 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        DB::table('users')->insert([
+            'employee_id' => '0003',
+            'name' => 'ポリテク次郎',
+            'password' => Hash::make('password123'), // ログイン用パスワード
+            'role_id' => 2, // 2: 一般社員
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // テストユーザー（経理部）を登録
         DB::table('users')->insert([
             'employee_id' => '0002',
@@ -29,5 +38,7 @@ class UserSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+
     }
 }
