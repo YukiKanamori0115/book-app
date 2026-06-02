@@ -154,11 +154,10 @@
                             <p><strong>・ISBN13 :</strong> {{ $book->isbn13 }}</p>
                         </div>
 
-                        <div
-                            class="w-40 md:w-56 flex-shrink-0 bg-white p-3 rounded-lg border border-gray-300 shadow-md">
+                        <div class="w-40 md:w-56 flex-shrink-0 bg-white p-3 rounded-lg border border-gray-300 shadow-md">
                             <img src="https://books.google.com/books/content?vid=ISBN:{{ $book->isbn13 }}&printsec=frontcover&img=1&zoom=1"
                                 alt="{{ $book->title }}の表紙" class="w-full h-auto object-cover rounded-md"
-                                onerror="this.onerror=null; this.src='/images/no-image.jpg';">
+                                onerror="this.onerror=null; this.src=&quot;{{ asset('images/no-image.png') }}&quot;;">
                         </div>
                     </div>
                 </div>
@@ -392,7 +391,7 @@
                         let actionButtons = '';
                         if (review.is_owner) {
                             actionButtons = `
-                                <button class="action-btn" onclick="editReview(${review.id}, ${review.rating}, '${escapeJsString(review.comment)}')">[編集]</button> 
+                                <button class="action-btn" onclick="editReview(${review.id}, ${review.rating}, '${escapeJsString(review.comment)}')">[編集]</button>
                                 <button class="action-btn" onclick="deleteReview(${review.id})">[削除]</button>
                             `;
                         }
@@ -401,9 +400,9 @@
                         div.id = `review-${review.id}`;
 
                         div.innerHTML = `
-                            <strong>${review.user_name} (${review.role_name})</strong> (★${review.rating}) : 
+                            <strong>${review.user_name} (${review.role_name})</strong> (★${review.rating}) :
                             <div class="comment-scroll-box">
-                                <span class="comment-text" style="white-space: pre-wrap;">${escapeHtml(review.comment)}</span> 
+                                <span class="comment-text" style="white-space: pre-wrap;">${escapeHtml(review.comment)}</span>
                             </div>
                             ${actionButtons}
                         `;

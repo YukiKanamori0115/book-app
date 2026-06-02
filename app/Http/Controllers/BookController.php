@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BookController extends Controller
 {
@@ -19,13 +20,13 @@ class BookController extends Controller
         if ($request->filled('isbn')) {
             $isbn = str_replace('-', '', $request->isbn);
             $query->where('isbn13', $isbn);
-        } 
+        }
         // 3. キーワード検索（タイトルまたは著者・あいまい検索）
         elseif ($request->filled('keyword')) {
             $keyword = $request->keyword;
-            $query->where(function($q) use ($keyword) {
+            $query->where(function ($q) use ($keyword) {
                 $q->where('title', 'LIKE', "%{$keyword}%")
-                  ->orWhere('author', 'LIKE', "%{$keyword}%");
+                    ->orWhere('author', 'LIKE', "%{$keyword}%");
             });
         }
 
@@ -48,7 +49,7 @@ class BookController extends Controller
     {
         // URLの {id} を元に、データベースから書籍を1件取得
         $book = Book::with('reviews.user')->findOrFail($id);
-
+        
         return view('books.show', compact('book'));
     }
 }
