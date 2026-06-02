@@ -11,8 +11,9 @@ class BookSearchController extends Controller
     //書籍管理（ISBN検索）
     public function isbnCheck(Request $request)
     {
-        //入力されたISBNの取得
-        $isbn = $request->isbn;
+        // 数字以外をすべて排除する（一番安全）
+        $isbn = preg_replace('/[^0-9]/', '', $request->isbn);
+
         //自社DB検索（購入済みかチェック）
         $book = Book::where('isbn13', $isbn)->first();
 
@@ -45,4 +46,3 @@ class BookSearchController extends Controller
         ]);
     }
 }
-

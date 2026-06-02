@@ -24,14 +24,21 @@ class BookAdminController extends Controller
      */
     public function checkIsbn(Request $request)
     {
-        // 13桁の半角数字のみを許容するバリデーション
+        // 1. バリデーションの前に、リクエストデータを数字のみに一括置換
+        $request->merge([
+            'isbn13' => preg_replace('/[^0-9]/', '', $request->input('isbn13'))
+        ]);
+
+        // 2. バリデーション
         $request->validate([
             'isbn13' => ['required', 'string', 'size:13', 'regex:/^[0-9]+$/'],
         ], [
+            'isbn13.size'  => 'ISBNは13桁の半角数字（ハイフン除く）で入力してください。',
             'isbn13.regex' => 'ISBNは13桁の半角数字で入力してください。',
         ]);
 
-        $isbn = $request->input('isbn13');
+        // 3. 安全に取得
+        $isbn = $request->input('isbn13'); // ここには13桁の数字だけが入っています
 
         // 【機能拡張】すでにローカルDBに登録済みの場合は、即座に「編集画面」へリダイレクト
         $existingBook = Book::where('isbn13', $isbn)->first();
@@ -174,6 +181,6 @@ class BookAdminController extends Controller
 
         // 削除完了後は、再び書籍を扱いやすいようISBN確認画面（管理トップ）へ戻す
         return redirect()->route('admin.books.checkForm')
-            ->with('status', '書籍レコードをデータベースから物理削除しました。');
+            ->with('status', '書籍情報をデータベースから削除しました。');
     }
 }

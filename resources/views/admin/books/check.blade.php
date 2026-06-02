@@ -1,45 +1,44 @@
 <x-app-layout>
-    <x-slot name="title">書籍マスタ管理</x-slot>
+    <x-slot name="title">書籍管理</x-slot>
 
     {{-- セッションメッセージ --}}
     @if (session('status'))
-        <div class="mb-4 text-sm font-medium text-green-600 bg-green-50 p-3 rounded-md border border-green-200">
-            {{ session('status') }}
-        </div>
+    <div class="mb-4 text-sm font-medium text-green-600 bg-green-50 p-3 rounded-md border border-green-200">
+        {{ session('status') }}
+    </div>
     @endif
 
     @if (session('error'))
-        <div class="mb-4 text-sm font-medium text-red-600">
-            {{ session('error') }}
-        </div>
+    <div class="mb-4 text-sm font-medium text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
+        {{ session('error') }}
+    </div>
     @endif
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-6">
-                    {{ __('書籍マスタ管理（ISBN確認）') }}
-                </h2>
-
-                <form action="{{ route('admin.books.checkIsbn') }}" method="POST" class="max-w-md">
-                    @csrf
-                    <div class="mb-6">
-                        <label for="isbn13" class="block text-sm font-medium text-gray-700 mb-2">ISBN13コード（半角数字13桁）</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="isbn13" name="isbn13" maxlength="13" value="{{ old('isbn13') }}" placeholder="9784798165882" required
-                                   class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 flex-1">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                                確認する
-                            </button>
-                        </div>
-                        @error('isbn13')
-                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </form>
-
-            </div>
+    {{-- 書籍管理（ISBN確認）セクション --}}
+    <section class="bg-white p-6 rounded-lg shadow-sm">
+        <div class="mb-4">
+            <h2 class="text-md font-bold text-gray-700">■ {{ __('書籍管理') }}</h2>
         </div>
-    </div>
+
+        <form action="{{ route('admin.books.checkIsbn') }}" method="POST" class="flex flex-col md:flex-row gap-4 max-w-2xl">
+            @csrf
+
+            {{-- ISBN13コード入力フィールド --}}
+            <div class="flex-1">
+                <input type="text" id="isbn13" name="isbn13" maxlength="17" value="{{ old('isbn13') }}"
+                    placeholder="978-4-06-123456-7 または 9784061234567" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-mono">
+
+                @error('isbn13')
+                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- ボタンのスタイルも一覧の「検索」にそろえる --}}
+            <button type="submit"
+                class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm font-medium whitespace-nowrap h-[38px] md:h-auto">
+                確認する
+            </button>
+        </form>
+    </section>
 </x-app-layout>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('書籍マスタ登録確認') }}
+            {{ __('書籍登録確認') }}
         </h2>
     </x-slot>
 
@@ -40,7 +40,7 @@
                             戻る
                         </a>
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white shadow-sm hover:bg-blue-700">
-                            この内容でマスタ登録する
+                            この内容で登録する
                         </button>
                     </div>
                 </form>
