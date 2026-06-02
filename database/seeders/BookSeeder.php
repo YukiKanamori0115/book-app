@@ -22,7 +22,7 @@ class BookSeeder extends Seeder
 
         // 2種類目の本を登録
         Book::create([
-            'isbn13' => '9784274226298',
+            'isbn13' => '9780000000000',
             'title' => '達人プログラマー',
             'author' => '大阪花子',
         ]);
