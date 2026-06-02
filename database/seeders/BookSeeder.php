@@ -27,10 +27,5 @@ class BookSeeder extends Seeder
             'author' => '大阪花子',
         ]);
 
-        Book::create([
-            'isbn13' => '0000000000000',
-            'title' => '達人プロラマー',
-            'author' => '大阪花子',
-        ]);
     }
 }
