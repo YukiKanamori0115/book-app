@@ -68,10 +68,18 @@ class BookAdminController extends Controller
             $summary = $data[0]['summary'] ?? [];
 
             // 出版社・価格・フラグ等は除外し、扱うのは以下の3項目のみ
+            $authorName = $summary['author'] ?? '不明';
+
+            // 1. 先に「／著」や「生没年（1896-1933）」を削除
+            $authorName = preg_replace('/(／著)?(,\d{4}-\d{4})?$/u', '', $authorName);
+
+            // 2. さらに名前の途中に入り込む「全角・半角のカンマ」を削除
+            $authorName = str_replace([',', ','], '', $authorName);
+
             $queryParams = [
                 'isbn13' => $summary['isbn'] ?? $isbn,
                 'title'  => $summary['title'] ?? '',
-                'author' => $summary['author'] ?? '不明',
+                'author' => $authorName, // 1,2で修正した名前を入れる
             ];
 
             return redirect()->route('admin.books.create', $queryParams);
